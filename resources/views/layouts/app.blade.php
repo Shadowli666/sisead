@@ -54,7 +54,7 @@
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <ul>
+            <ul class="list-unstyled">
                 <li>
                     <button class="btn btn-primary w-100 mb-2" type="button" data-bs-toggle="collapse"
                         data-bs-target="#collapseStudents" aria-expanded="false" aria-controls="collapseStudents">
@@ -62,7 +62,7 @@
                     </button>
                     <div class="collapse mb-3" id="collapseStudents">
                         <div class="card card-body">
-                            <ul>
+                            <ul class="list-unstyled">
                                 <li>
                                     <div class="btn-group w-100">
                                         <a href="{{url('estudiante/')}}" class="btn btn-primary" type="button">Datos de
@@ -89,7 +89,7 @@
                     </button>
                     <div class="collapse mb-3" id="collapseProffesors">
                         <div class="card card-body">
-                            <ul>
+                            <ul class="list-unstyled">
                                 <li>
                                     <div class="btn-group w-100" role="group" aria-label="Basic example">
                                         <a href="{{url('profesor/')}}" class="btn btn-primary" type="button">Datos de
@@ -120,7 +120,7 @@
                 </ul>
 
                 <!-- Right Side Of Navbar -->
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto list-unstyled">
                     <!-- Authentication Links -->
                     @guest
                     @if (Route::has('login'))
