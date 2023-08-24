@@ -52,11 +52,17 @@
                 <h4 class="card-title">Impresión de Planilla</h4>
                 <p class="card-text">Imprimir la planilla de inscripción de un estudiante</p>
                 <div class="input-group m-auto w-50">
-                    <span class="input-group-text">ID</span>
-                    <input type="text" id="input_cedula_imprimir" class="form-control">
-                    {!! Form::select('input_periodo_imprimir', $periodo, null, ['class' => 'form-select', 'id' => 'input_periodo_imprimir']) !!}
-                    <button class="btn btn-primary" type="button" id="btn_imprimir"><i
+                    <form action="inscripcion/planilla" method="post" class="d-flex mx-auto">
+                        @csrf
+                        <div class="input-group">
+
+                            <span class="input-group-text">ID</span>
+                            <input type="text" id="input_cedula_imprimir" class="form-control" required name="cedula">
+                            {!! Form::select('input_periodo_imprimir', $periodo, null, ['class' => 'form-select', 'id' => 'input_periodo_imprimir']) !!}
+                            <button class="btn btn-primary" type="submit" id="btn_imprimir"><i
                             class="fa-solid fa-magnifying-glass"></i></button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -66,27 +72,25 @@
 <script>
 const init = () => {
     document.querySelector("#btn_buscar").addEventListener("click", redirectToModificar, false)
-    document.querySelector("#btn_imprimir").addEventListener("click", redirectToImprimir, false)
+   // document.querySelector("#btn_imprimir").addEventListener("click", redirectToImprimir, false)
     document.querySelector("#btn_inscribir").addEventListener("click", redirectToInscribir, false)
 }
 
 const redirectToModificar = () => {
     const input_cedula = document.querySelector('#input_cedula').value
     let input_periodo = document.querySelector('#input_periodo').value
-    //input_periodo = input_periodo.options[input_periodo.selectedIndex].text Si se quiere el texto del select en vez del value
-    url = 'inscripcion/' + input_cedula +'/'+ input_periodo +'/edit'
-    window.location.href = url;
+    if(input_cedula == "" || input_periodo == ""){
+        console.log("asdas");
+    }
+    else{
+        //input_periodo = input_periodo.options[input_periodo.selectedIndex].text Si se quiere el texto del select en vez del value
+        url = 'inscripcion/' + input_cedula +'/'+ input_periodo +'/edit'
+        window.location.href = url;
+    }
 }
-
 const redirectToInscribir = () => {
     const input_cedula_inscribir = document.querySelector('#input_cedula_inscribir').value
     url = 'inscripcion/create/' + input_cedula_inscribir
-    window.location.href = url;
-}
-const redirectToImprimir = () => {
-    const input_cedula_imprimir = document.querySelector('#input_cedula_imprimir').value
-    const input_periodo_imprimir = document.querySelector('#input_periodo_imprimir').value
-    url = 'inscripcion/planilla/' + input_cedula_imprimir +'/'+ input_periodo_imprimir;
     window.location.href = url;
 }
 init()

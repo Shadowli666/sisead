@@ -40,7 +40,7 @@ Route::group(['middleware' => 'auth'], function(){
     Route::resource('procedencia', ProcedenciaController::class);
     Route::resource('materias', MateriasController::class);
     Route::resource('estudiante', EstudianteController::class);
-    Route::get('inscripcion/planilla/{cedula}/{periodo_id}','App\Http\Controllers\InscripcionEstudiantesController@planillaInscripcion');
+    Route::post('/inscripcion/planilla','App\Http\Controllers\InscripcionEstudiantesController@planillaInscripcion');
     Route::resource('inscripcion', InscripcionEstudiantesController::class, ['except' => ['create']]);
     Route::post('notas/notas-aprobadas', 'App\Http\Controllers\NotaEstudiantesController@notasAprobadas');
     Route::resource('notas', NotaEstudiantesController::class);

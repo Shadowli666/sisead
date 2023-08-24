@@ -11,7 +11,10 @@ use App\Models\NotaEstudiantes;
 use Illuminate\Http\Request;
 use App\Models\procedencia;
 use App\Models\Periodo;
+use Illuminate\Queue\RedisQueue;
 use PDF;
+
+use function PHPUnit\Framework\isEmpty;
 
 class InscripcionEstudiantesController extends Controller
 {
@@ -173,33 +176,38 @@ class InscripcionEstudiantesController extends Controller
     /**
      * Muestra en pdf las materias que inscribió un estudiante en el trimestre
      */
-    public function planillaInscripcion($cedula,$periodo_id)
+    public function planillaInscripcion(Request $request)
     {
-    //obtener el id del estudiante
-    $idEstudiante = Estudiante::where('cedula', '=', $cedula)->first();
-    if($idEstudiante){
-        //obtener el total de las uc inscritas 
-    $ucInscritas = inscripcion_estudiantes::selectRaw('SUM(materias.costo_uc) as total_uc')
-    ->join('materias', 'inscripcion_estudiantes.materia_id', '=', 'materias.id')
-    ->join('periodos', 'inscripcion_estudiantes.periodo_id', '=', 'periodos.id')
-    ->where('inscripcion_estudiantes.estudiante_id', $idEstudiante->id)
-    ->groupBy('periodos.id')
-    ->first();    
-    $data = inscripcion_estudiantes::where('estudiante_id','=',$idEstudiante->id)
-    ->where('periodo_id',$periodo_id)
-    ->get();
-    $carreras = Carreras::get();
-    $procedencias = procedencia::get();
-    //$pdf = \PDF::loadView('inscripcion.planilla',compact('data','ucInscritas','procedencias','carreras'))->setOptions(['defaultFont' => 'sans-serif', 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
-    $pdf = PDF::setOptions(['defaultFont' => 'sans-serif',
+        $request->cedula ? $cedula = $request->cedula : redirect('inscripcion')->with('mensaje','Campo de cédula vacío');
+        $request->input_periodo_imprimir ? $periodo_id = $request->input_periodo_imprimir : redirect('inscripcion')->with('mensaje','Campo de período vacío');
+        //obtener el id del estudiante
+        $idEstudiante = Estudiante::where('cedula', '=', $cedula)->first();
+        if($idEstudiante){
+            //obtener el total de las uc inscritas 
+            $ucInscritas = inscripcion_estudiantes::selectRaw('SUM(materias.costo_uc) as total_uc')
+            ->join('materias', 'inscripcion_estudiantes.materia_id', '=', 'materias.id')
+            ->join('periodos', 'inscripcion_estudiantes.periodo_id', '=', 'periodos.id')
+            ->where('inscripcion_estudiantes.estudiante_id', $idEstudiante->id)
+            ->where('inscripcion_estudiantes.periodo_id', $periodo_id)
+            ->first();
+            $data = inscripcion_estudiantes::where('estudiante_id','=',$idEstudiante->id)
+            ->where('periodo_id',$periodo_id)
+            ->get();
+            $carreras = Carreras::get();
+            $procedencias = procedencia::get();
+            if($data->isEmpty());
+            {
+                return redirect('inscripcion')->with('mensaje','El estudiante no ha inscrito materias');
+            }
+            //$pdf = \PDF::loadView('inscripcion.planilla',compact('data','ucInscritas','procedencias','carreras'))->setOptions(['defaultFont' => 'sans-serif', 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
+            $pdf = PDF::setOptions(['defaultFont' => 'sans-serif',
                             'isHtml5ParserEnabled' => true,
                             'isRemoteEnabled' => true])
                             ->loadView('inscripcion.planilla',compact('data','ucInscritas','procedencias','carreras'));
-    
-    return $pdf->stream('planilla_inscripcion.pdf');
-    }
-    else{
-        return redirect('inscripcion')->with('mensaje','Cédula no encontrada');
-    }
+            return $pdf->stream('planilla_inscripcion.pdf');
+        }
+        else{
+            return redirect('inscripcion')->with('mensaje','Cédula no encontrada');
+        }
     }
 }
