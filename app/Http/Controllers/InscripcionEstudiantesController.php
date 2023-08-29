@@ -195,8 +195,7 @@ class InscripcionEstudiantesController extends Controller
             ->get();
             $carreras = Carreras::get();
             $procedencias = procedencia::get();
-            if($data->isEmpty());
-            {
+            if($data->isEmpty()){
                 return redirect('inscripcion')->with('mensaje','El estudiante no ha inscrito materias');
             }
             //$pdf = \PDF::loadView('inscripcion.planilla',compact('data','ucInscritas','procedencias','carreras'))->setOptions(['defaultFont' => 'sans-serif', 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
