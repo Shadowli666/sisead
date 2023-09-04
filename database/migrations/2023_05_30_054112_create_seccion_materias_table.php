@@ -13,7 +13,7 @@ class CreateSeccionMateriasTable extends Migration
      */
     public function up()
     {
-        Schema::create('seccion_materias', function (Blueprint $table) {
+        Schema::create('SeccionMaterias', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('seccion_id')->unsigned();
             $table->bigInteger('periodo_id')->unsigned();
@@ -37,6 +37,6 @@ class CreateSeccionMateriasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('seccion_materias');
+        Schema::dropIfExists('SeccionMaterias');
     }
 }

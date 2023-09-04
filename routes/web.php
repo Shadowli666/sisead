@@ -10,7 +10,9 @@ use App\Http\Controllers\MateriasController;
 use App\Http\Controllers\NotaEstudiantesController;
 use App\Http\Controllers\EstudianteController;
 use App\Http\Controllers\InscripcionEstudiantesController;
+use App\Http\Controllers\SeccionMateriaController;
 use App\Http\Controllers\SeccionController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +38,7 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/profesor/edit/subject', [ProfesorController::class, 'editSubject'])->name('profesor.editSubject');
     Route::put('/profesor/store/subject/{id}', [ProfesorController::class, 'storeSubject'])->name('profesor.storeSubject');// Quizas esta bien?
     Route::resource('periodo', PeriodoController::class);
+    Route::resource('/seccion/asignar',SeccionMateriaController::class);
     Route::resource('seccion', SeccionController::class);
     Route::resource('procedencia', ProcedenciaController::class);
     Route::resource('materias', MateriasController::class);

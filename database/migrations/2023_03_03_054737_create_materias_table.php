@@ -19,7 +19,7 @@ class CreateMateriasTable extends Migration
             $table->string('nombre_materia', 50);
             $table->bigInteger('carrera_id')->unsigned();
             $table->bigInteger('profesor_id')->unsigned()->nullable();
-            $table->string('cod_materia', 25);
+            $table->string('cod_materia', 25)->unique();
             $table->integer('costo_uc')->nullable();
             $table->integer('num_trimestre');
             /* Relaciones foraneas */
